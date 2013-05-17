@@ -17,7 +17,14 @@
  */
 package com.github.qrcode;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -25,6 +32,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -135,6 +143,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         setTitle("QR code generator");
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel3.setPreferredSize(new java.awt.Dimension(212, 212));
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -144,11 +153,16 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 184, Short.MAX_VALUE)
+            .add(0, 208, Short.MAX_VALUE)
         );
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextField2.setText("http://");
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -272,6 +286,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jTabbedPane6.addTab("SMS", jPanel7);
 
+        jScrollPane3.setBorder(null);
         jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jLabel5.setText("First Name");
@@ -387,7 +402,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                             .add(jLabel15)
                             .add(jTextField15, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jLabel18))
-                        .add(0, 298, Short.MAX_VALUE)))
+                        .add(0, 300, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -501,6 +516,10 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+       generateQrCode(jTextField2.getText());
+    }//GEN-LAST:event_jTextField2KeyTyped
+
 
     private static void setLookAndFeel()
         throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
@@ -588,5 +607,21 @@ public class QrcodeGenerator extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
+    private void generateQrCode(String messsage) {
+        try {
+            Hashtable hintMap = new Hashtable();
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix byteMatrix = qrCodeWriter.encode(messsage,
+                    BarcodeFormat.QR_CODE, jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height, hintMap);
+            int CrunchifyWidth = byteMatrix.getWidth();
+            BufferedImage image = new BufferedImage(CrunchifyWidth, CrunchifyWidth,
+                    BufferedImage.TYPE_INT_RGB);
+            image.createGraphics();
+        } catch (WriterException ex) {
+            Logger.getLogger(QrcodeGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
 }
