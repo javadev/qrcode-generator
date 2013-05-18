@@ -23,6 +23,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
@@ -45,6 +48,18 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @version $Revision$ $Date$
  */
 public class QrcodeGenerator extends javax.swing.JFrame {
+
+    private BufferedImage image;
+    private class QRCodePanel extends javax.swing.JPanel {
+
+        @Override
+        protected void paintComponent(Graphics grphcs) {
+            super.paintComponent(grphcs);
+            if (image != null) {
+                grphcs.drawImage(image, 0, 0, null);
+            }
+        }
+    }
 
     /** Creates new form */
     public QrcodeGenerator() {
@@ -90,7 +105,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel3 = new QRCodePanel();
         jTabbedPane6 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
@@ -156,7 +171,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             .add(0, 208, Short.MAX_VALUE)
         );
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18));
         jTextField2.setText("http://");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -184,7 +199,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         jTabbedPane6.addTab("URL", jPanel4);
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 18));
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -199,7 +214,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
+                        .add(0, 452, Short.MAX_VALUE)
                         .add(jLabel1)))
                 .addContainerGap())
         );
@@ -215,7 +230,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jTabbedPane6.addTab("Text", jPanel5);
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -238,12 +253,12 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel2.setText("Number:");
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel3.setText("Message:");
 
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 18));
         jTextArea2.setRows(4);
         jScrollPane2.setViewportView(jTextArea2);
 
@@ -257,14 +272,14 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
-                    .add(jTextField3)
+                    .add(jTextField3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .add(jPanel7Layout.createSequentialGroup()
                         .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel2)
                             .add(jLabel3))
-                        .add(0, 0, Short.MAX_VALUE))
+                        .add(0, 478, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
+                        .add(0, 452, Short.MAX_VALUE)
                         .add(jLabel4)))
                 .addContainerGap())
         );
@@ -291,57 +306,57 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel5.setText("First Name");
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel6.setText("Family Name");
 
-        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel7.setText("Phone Number");
 
         jLabel8.setText("Email");
 
-        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 18));
 
-        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel9.setText("Website");
 
-        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 18));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel10.setText("Add Organization");
 
         jLabel11.setText("Company Name");
 
         jLabel12.setText("Title within Company");
 
-        jTextField9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField9.setFont(new java.awt.Font("Tahoma", 0, 18));
 
-        jTextField10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField10.setFont(new java.awt.Font("Tahoma", 0, 18));
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel13.setText("Address");
 
         jLabel14.setText("Street");
 
-        jTextField11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField11.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel15.setText("City");
 
-        jTextField12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField12.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel16.setText("State");
 
-        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel17.setText("Zip");
 
-        jTextField14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField14.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         jLabel18.setText("Country");
 
-        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -358,8 +373,8 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel8Layout.createSequentialGroup()
                                 .add(jLabel12)
-                                .add(0, 0, Short.MAX_VALUE))
-                            .add(jTextField10)))
+                                .add(0, 195, Short.MAX_VALUE))
+                            .add(jTextField10, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)))
                     .add(jPanel8Layout.createSequentialGroup()
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -367,18 +382,18 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                             .add(jLabel7))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextField5)
+                            .add(jTextField5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                             .add(jPanel8Layout.createSequentialGroup()
                                 .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel8)
                                     .add(jLabel6))
-                                .add(0, 0, Short.MAX_VALUE))))
+                                .add(0, 234, Short.MAX_VALUE))))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
                         .add(jTextField6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jTextField7))
-                    .add(jSeparator1)
-                    .add(jSeparator2)
+                        .add(jTextField7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
+                    .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                    .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
                     .add(jPanel8Layout.createSequentialGroup()
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jTextField13, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 224, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -387,8 +402,8 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel8Layout.createSequentialGroup()
                                 .add(jLabel17)
-                                .add(0, 0, Short.MAX_VALUE))
-                            .add(jTextField14)))
+                                .add(0, 280, Short.MAX_VALUE))
+                            .add(jTextField14, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)))
                     .add(jPanel8Layout.createSequentialGroup()
                         .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -485,7 +500,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 124, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane6)
+                .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -498,7 +513,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jButton2)
-                        .add(0, 0, Short.MAX_VALUE)))
+                        .add(0, 308, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -609,6 +624,9 @@ public class QrcodeGenerator extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void generateQrCode(String messsage) {
+        if (messsage == null || messsage.isEmpty()) {
+            return;
+        }
         try {
             Hashtable hintMap = new Hashtable();
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -616,9 +634,21 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             BitMatrix byteMatrix = qrCodeWriter.encode(messsage,
                     BarcodeFormat.QR_CODE, jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height, hintMap);
             int CrunchifyWidth = byteMatrix.getWidth();
-            BufferedImage image = new BufferedImage(CrunchifyWidth, CrunchifyWidth,
+            image = new BufferedImage(CrunchifyWidth, CrunchifyWidth,
                     BufferedImage.TYPE_INT_RGB);
             image.createGraphics();
+            Graphics2D graphics=(Graphics2D)image.getGraphics();
+            graphics.setColor(Color.WHITE);
+            graphics.fillRect(0, 0, CrunchifyWidth, CrunchifyWidth);
+            graphics.setColor(Color.BLACK);
+            for (int i = 0; i < CrunchifyWidth; i++) {
+                for (int j = 0; j < CrunchifyWidth; j++) {
+                    if (byteMatrix.get(i, j)) {
+                        graphics.fillRect(i, j, 1, 1);
+                    }
+                }
+            }
+            jPanel3.repaint();
         } catch (WriterException ex) {
             Logger.getLogger(QrcodeGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
