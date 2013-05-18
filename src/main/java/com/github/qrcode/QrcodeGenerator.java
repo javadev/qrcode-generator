@@ -26,18 +26,28 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -50,6 +60,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class QrcodeGenerator extends javax.swing.JFrame {
 
     private BufferedImage image;
+    private JFileChooser chooser1 = new JFileChooser();
     private class QRCodePanel extends javax.swing.JPanel {
 
         @Override
@@ -58,6 +69,56 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             if (image != null) {
                 grphcs.drawImage(image, 0, 0, null);
             }
+        }
+    }
+
+    public class FilterPNG extends javax.swing.filechooser.FileFilter {
+        public String getDescription() {
+            return "PNG files";
+        }
+
+        public boolean accept(File file) {
+            if (file.isDirectory()) {
+                return true;
+            }
+            String name = file.getName();
+            name = name.toLowerCase();
+            return name.endsWith(".png");
+        }
+    }
+    
+    private class TransferableImage implements java.awt.datatransfer.Transferable {
+
+        private final java.awt.Image image;
+
+        public TransferableImage(java.awt.Image image ) {
+            this.image = image;
+        }
+
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+            if (flavor.equals( DataFlavor.imageFlavor ) && image != null) {
+                return image;
+            }
+            else {
+                throw new UnsupportedFlavorException( flavor );
+            }
+        }
+
+        public DataFlavor[] getTransferDataFlavors() {
+            DataFlavor[] flavors = new DataFlavor[ 1 ];
+            flavors[ 0 ] = DataFlavor.imageFlavor;
+            return flavors;
+        }
+
+        public boolean isDataFlavorSupported( DataFlavor flavor ) {
+            DataFlavor[] flavors = getTransferDataFlavors();
+            for ( int i = 0; i < flavors.length; i++ ) {
+                if ( flavor.equals( flavors[ i ] ) ) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -89,6 +150,9 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
+        chooser1.addChoosableFileFilter(new FilterPNG());
+        chooser1.setDialogTitle("Select PNG file");
+        chooser1.setCurrentDirectory(new File("."));
         final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         final int x = (screenSize.width - getWidth()) / 2;
         final int y = (screenSize.height - getHeight()) / 2;
@@ -153,6 +217,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jTextField15 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("QR code generator");
@@ -171,11 +236,17 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             .add(0, 208, Short.MAX_VALUE)
         );
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTabbedPane6.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane6StateChanged(evt);
+            }
+        });
+
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextField2.setText("http://");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField2KeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
             }
         });
 
@@ -199,8 +270,13 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         jTabbedPane6.addTab("URL", jPanel4);
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 18));
+        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea1.setRows(5);
+        jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel1.setText("160 characters");
@@ -230,7 +306,12 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jTabbedPane6.addTab("Text", jPanel5);
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -253,13 +334,23 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel2.setText("Number:");
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Message:");
 
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 18));
+        jTextArea2.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea2.setRows(4);
+        jTextArea2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextArea2KeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTextArea2);
 
         jLabel4.setText("140 characters");
@@ -489,6 +580,18 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         jTabbedPane6.addTab("Contact", jScrollPane3);
 
         jButton2.setText("Save to disk");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Copy");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -496,9 +599,12 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 124, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButton2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 124, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jTabbedPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
                 .addContainerGap())
@@ -511,8 +617,10 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                     .add(jTabbedPane6)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jButton2)
+                        .add(11, 11, 11)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jButton2)
+                            .add(jButton1))
                         .add(0, 308, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -531,9 +639,71 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+private void jTextArea1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyReleased
+    String text = jTextArea1.getText();
+    int length = text.length();
+    jLabel1.setText("" + length + " character" + (length <= 1 ? "" : "s"));
+    generateQrCode(text);
+}//GEN-LAST:event_jTextArea1KeyReleased
+
+private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
        generateQrCode(jTextField2.getText());
-    }//GEN-LAST:event_jTextField2KeyTyped
+}//GEN-LAST:event_jTextField2KeyReleased
+
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    if (chooser1.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+        return;
+    }
+    String fileName = chooser1.getSelectedFile().getPath();
+    try {
+        ImageIO.write(image, "png", new File(fileName));
+    } catch (IOException ex) {
+        Logger.getLogger(QrcodeGenerator.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}//GEN-LAST:event_jButton2ActionPerformed
+
+private void jTabbedPane6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane6StateChanged
+    javax.swing.JTabbedPane jt = (javax.swing.JTabbedPane) evt.getSource();
+    switch(jt.getSelectedIndex()) {
+        case 0:
+            generateQrCode(jTextField2.getText());
+            break;
+        case 1:
+            String text = jTextArea1.getText();
+            int length = text.length();
+            jLabel1.setText("" + length + " character" + (length <= 1 ? "" : "s"));
+            generateQrCode(text);
+            break;
+        case 2:
+            generateQrCode("tel:" + jTextField1.getText());
+            break;
+        case 3:
+            generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+            break;
+    }
+}//GEN-LAST:event_jTabbedPane6StateChanged
+
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    TransferableImage trans = new TransferableImage(image);
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    clipboard.setContents(trans, new ClipboardOwner() {
+            public void lostOwnership(Clipboard clpbrd, Transferable t) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        } );
+}//GEN-LAST:event_jButton1ActionPerformed
+
+private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+       generateQrCode("tel:" + jTextField1.getText());
+}//GEN-LAST:event_jTextField1KeyReleased
+
+private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+       generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+}//GEN-LAST:event_jTextField3KeyTyped
+
+private void jTextArea2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea2KeyTyped
+       generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+}//GEN-LAST:event_jTextArea2KeyTyped
 
 
     private static void setLookAndFeel()
@@ -572,6 +742,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -625,11 +796,13 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
     private void generateQrCode(String messsage) {
         if (messsage == null || messsage.isEmpty()) {
+            image = null;
             return;
         }
         try {
             Hashtable hintMap = new Hashtable();
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix byteMatrix = qrCodeWriter.encode(messsage,
                     BarcodeFormat.QR_CODE, jPanel3.getPreferredSize().width, jPanel3.getPreferredSize().height, hintMap);
