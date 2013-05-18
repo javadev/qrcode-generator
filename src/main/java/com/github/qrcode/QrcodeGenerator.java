@@ -24,6 +24,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -58,6 +59,18 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @version $Revision$ $Date$
  */
 public class QrcodeGenerator extends javax.swing.JFrame {
+
+    private static final String ADDRESS_TEMPLATE = 
+    "BEGIN:VCARD\n"
+    + "VERSION:3.0\n"
+    + "N:{LN};{FN};\n"
+    + "FN:{FN} {LN}\n"
+    + "TITLE:{TITLE}/{COMPANYNAME}\n"
+    + "TEL;TYPE=WORK;VOICE:{PHONE}\n"
+    + "EMAIL;TYPE=WORK:{EMAIL}\n"
+    + "ADR;TYPE=INTL,POSTAL,WORK:;;{STREET};{CITY};{STATE};{ZIP};{COUNTRY}\n"
+    + "URL;TYPE=WORK:{WEBSITE}\n"
+    + "END:VCARD";
 
     private BufferedImage image;
     private JFileChooser chooser1 = new JFileChooser();
@@ -126,10 +139,35 @@ public class QrcodeGenerator extends javax.swing.JFrame {
     public QrcodeGenerator() {
         initComponents();
         XMLDecoder d;
+        String x = null;
+        String y = null;
+        String height = null;
+        String width = null;
+        String index = null;
         try {
            d = new XMLDecoder(new BufferedInputStream(new FileInputStream("qrcode.xml")));
            jTextField1.setText((String) d.readObject());
+           jTextField2.setText((String) d.readObject());
+           jTextField3.setText((String) d.readObject());
+           jTextField4.setText((String) d.readObject());
+           jTextField5.setText((String) d.readObject());
+           jTextField6.setText((String) d.readObject());
+           jTextField7.setText((String) d.readObject());
+           jTextField8.setText((String) d.readObject());
+           jTextField9.setText((String) d.readObject());
+           jTextField10.setText((String) d.readObject());
+           jTextField11.setText((String) d.readObject());
+           jTextField12.setText((String) d.readObject());
+           jTextField13.setText((String) d.readObject());
+           jTextField14.setText((String) d.readObject());
+           jTextField15.setText((String) d.readObject());
            jTextArea1.setText((String) d.readObject());
+           jTextArea2.setText((String) d.readObject());
+           x = (String) d.readObject();
+           y = (String) d.readObject();
+           height = (String) d.readObject();
+           width = (String) d.readObject();
+           index = (String) d.readObject();
            d.close();
         } catch (Exception ex) {
             ex.getMessage();
@@ -142,7 +180,27 @@ public class QrcodeGenerator extends javax.swing.JFrame {
                 try {
                     e = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("qrcode.xml")));
                     e.writeObject(jTextField1.getText());
+                    e.writeObject(jTextField2.getText());
+                    e.writeObject(jTextField3.getText());
+                    e.writeObject(jTextField4.getText());
+                    e.writeObject(jTextField5.getText());
+                    e.writeObject(jTextField6.getText());
+                    e.writeObject(jTextField7.getText());
+                    e.writeObject(jTextField8.getText());
+                    e.writeObject(jTextField9.getText());
+                    e.writeObject(jTextField10.getText());
+                    e.writeObject(jTextField11.getText());
+                    e.writeObject(jTextField12.getText());
+                    e.writeObject(jTextField13.getText());
+                    e.writeObject(jTextField14.getText());
+                    e.writeObject(jTextField15.getText());
                     e.writeObject(jTextArea1.getText());
+                    e.writeObject(jTextArea2.getText());
+                    e.writeObject("" + getLocation().x);
+                    e.writeObject("" + getLocation().y);
+                    e.writeObject("" + getSize().height);
+                    e.writeObject("" + getSize().width);
+                    e.writeObject("" + jTabbedPane6.getSelectedIndex());
                     e.close();
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(QrcodeGenerator.class.getName()).log(Level.SEVERE, null, ex);
@@ -154,9 +212,24 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         chooser1.setDialogTitle("Select PNG file");
         chooser1.setCurrentDirectory(new File("."));
         final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        final int x = (screenSize.width - getWidth()) / 2;
-        final int y = (screenSize.height - getHeight()) / 2;
-        setLocation(x, y);
+        if (x == null) {
+            x = "" + ((screenSize.width - getWidth()) / 2);
+        }
+        if (y == null) {
+            y = "" + ((screenSize.height - getHeight()) / 2);
+        }
+        if (height == null) {
+            height = "" + getPreferredSize().height;
+        }
+        if (width == null) {
+            width = "" + getPreferredSize().width;
+        }
+        if (index == null) {
+            index = "" + jTabbedPane6.getSelectedIndex();
+        }
+        setLocation(Integer.valueOf(x), Integer.valueOf(y));
+        setSize(new Dimension(Integer.valueOf(width), Integer.valueOf(height)));
+        jTabbedPane6.setSelectedIndex(Integer.valueOf(index));
     }
 
 
@@ -406,19 +479,39 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel6.setText("Family Name");
 
-        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("Phone Number");
 
         jLabel8.setText("Email");
 
-        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
-        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel9.setText("Website");
 
-        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel10.setText("Add Organization");
@@ -427,32 +520,67 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel12.setText("Title within Company");
 
-        jTextField9.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
-        jTextField10.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel13.setText("Address");
 
         jLabel14.setText("Street");
 
-        jTextField11.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField11.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel15.setText("City");
 
-        jTextField12.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField12.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel16.setText("State");
 
-        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField13.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel17.setText("Zip");
 
         jTextField14.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel18.setText("Country");
 
-        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField15.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -683,7 +811,25 @@ private void jTabbedPane6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-
             generateQrCode("tel:" + jTextField1.getText());
             break;
         case 3:
-            generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+            String text2 = jTextArea2.getText();
+            int length2 = text2.length();
+            jLabel4.setText("" + length2 + " character" + (length2 <= 1 ? "" : "s"));
+            generateQrCode("sms:" + jTextField3.getText() + ":" + text2);
+            break;
+        case 4:
+            generateQrCode(ADDRESS_TEMPLATE.replace("{FN}", jTextField4.getText())
+            .replace("{LN}", jTextField5.getText())
+            .replace("{PHONE}", jTextField6.getText())
+            .replace("{EMAIL}", jTextField7.getText())
+            .replace("{WEBSITE}", jTextField8.getText())
+            .replace("{COMPANYNAME}", jTextField9.getText())
+            .replace("{TITLE}", jTextField10.getText())
+            .replace("{STREET}", jTextField11.getText())
+            .replace("{CITY}", jTextField12.getText())
+            .replace("{STATE}", jTextField13.getText())
+            .replace("{ZIP}", jTextField14.getText())
+            .replace("{COUNTRY}", jTextField15.getText())
+            );
             break;
     }
 }//GEN-LAST:event_jTabbedPane6StateChanged
@@ -699,31 +845,34 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 }//GEN-LAST:event_jButton1ActionPerformed
 
 private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-       generateQrCode("tel:" + jTextField1.getText());
+    generateQrCode("tel:" + jTextField1.getText());
 }//GEN-LAST:event_jTextField1KeyReleased
 
 private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
-       generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+    generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
 }//GEN-LAST:event_jTextField3KeyTyped
 
 private void jTextArea2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea2KeyTyped
-       generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
+    String text = jTextArea2.getText();
+    int length = text.length();
+    jLabel4.setText("" + length + " character" + (length <= 1 ? "" : "s"));
+    generateQrCode("sms:" + jTextField3.getText() + ":" + text);
 }//GEN-LAST:event_jTextArea2KeyTyped
 
 private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-    /*
- BEGIN:VCARD
- VERSION:3.0
- N:Caesar Augustus;Galus Julius;
- FN:Galus Julius Caesar Augustus
- TITLE:CEO/Emperor
- TEL;TYPE=WORK;VOICE:+555 946017
- TEL;TYPE=WORK;CELL:+555 678658
- EMAIL;TYPE=WORK:caesar.rules@gmail.es
- ADR;TYPE=INTL,POSTAL,WORK:;;Velitrae Ox Head avenue, 1;Rome;Augusta;14567;Italy
- URL;TYPE=WORK:http://www.thosewhoareabouttodiesaluteyou.com
- END:VCARD
-     */
+    generateQrCode(ADDRESS_TEMPLATE.replace("{FN}", jTextField4.getText())
+            .replace("{LN}", jTextField5.getText())
+            .replace("{PHONE}", jTextField6.getText())
+            .replace("{EMAIL}", jTextField7.getText())
+            .replace("{WEBSITE}", jTextField8.getText())
+            .replace("{COMPANYNAME}", jTextField9.getText())
+            .replace("{TITLE}", jTextField10.getText())
+            .replace("{STREET}", jTextField11.getText())
+            .replace("{CITY}", jTextField12.getText())
+            .replace("{STATE}", jTextField13.getText())
+            .replace("{ZIP}", jTextField14.getText())
+            .replace("{COUNTRY}", jTextField15.getText())
+            );
 }//GEN-LAST:event_jTextField4KeyReleased
 
 
