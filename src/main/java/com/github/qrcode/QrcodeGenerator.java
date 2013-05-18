@@ -60,7 +60,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class QrcodeGenerator extends javax.swing.JFrame {
 
-    private static final String ADDRESS_TEMPLATE = 
+    private static final String ADDRESS_TEMPLATE =
     "BEGIN:VCARD\n"
     + "VERSION:3.0\n"
     + "N:{LN};{FN};\n"
@@ -85,7 +85,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         }
     }
 
-    public class FilterPNG extends javax.swing.filechooser.FileFilter {
+    private class FilterPNG extends javax.swing.filechooser.FileFilter {
         public String getDescription() {
             return "PNG files";
         }
@@ -99,34 +99,33 @@ public class QrcodeGenerator extends javax.swing.JFrame {
             return name.endsWith(".png");
         }
     }
-    
+
     private class TransferableImage implements java.awt.datatransfer.Transferable {
 
         private final java.awt.Image image;
 
-        public TransferableImage(java.awt.Image image ) {
+        public TransferableImage(java.awt.Image image) {
             this.image = image;
         }
 
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-            if (flavor.equals( DataFlavor.imageFlavor ) && image != null) {
+            if (flavor.equals( DataFlavor.imageFlavor) && image != null) {
                 return image;
-            }
-            else {
-                throw new UnsupportedFlavorException( flavor );
+            } else {
+                throw new UnsupportedFlavorException(flavor);
             }
         }
 
         public DataFlavor[] getTransferDataFlavors() {
-            DataFlavor[] flavors = new DataFlavor[ 1 ];
-            flavors[ 0 ] = DataFlavor.imageFlavor;
+            DataFlavor[] flavors = new DataFlavor[1];
+            flavors[0] = DataFlavor.imageFlavor;
             return flavors;
         }
 
-        public boolean isDataFlavorSupported( DataFlavor flavor ) {
+        public boolean isDataFlavorSupported( DataFlavor flavor) {
             DataFlavor[] flavors = getTransferDataFlavors();
             for ( int i = 0; i < flavors.length; i++ ) {
-                if ( flavor.equals( flavors[ i ] ) ) {
+                if ( flavor.equals( flavors[i] ) ) {
                     return true;
                 }
             }
