@@ -397,7 +397,12 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         jLabel5.setText("First Name");
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel6.setText("Family Name");
 
@@ -704,6 +709,22 @@ private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 private void jTextArea2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea2KeyTyped
        generateQrCode("sms:" + jTextField3.getText() + ":" + jTextArea2.getText());
 }//GEN-LAST:event_jTextArea2KeyTyped
+
+private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+    /*
+ BEGIN:VCARD
+ VERSION:3.0
+ N:Caesar Augustus;Galus Julius;
+ FN:Galus Julius Caesar Augustus
+ TITLE:CEO/Emperor
+ TEL;TYPE=WORK;VOICE:+555 946017
+ TEL;TYPE=WORK;CELL:+555 678658
+ EMAIL;TYPE=WORK:caesar.rules@gmail.es
+ ADR;TYPE=INTL,POSTAL,WORK:;;Velitrae Ox Head avenue, 1;Rome;Augusta;14567;Italy
+ URL;TYPE=WORK:http://www.thosewhoareabouttodiesaluteyou.com
+ END:VCARD
+     */
+}//GEN-LAST:event_jTextField4KeyReleased
 
 
     private static void setLookAndFeel()
