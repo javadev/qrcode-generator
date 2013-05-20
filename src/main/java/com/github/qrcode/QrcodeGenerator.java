@@ -100,7 +100,7 @@ public class QrcodeGenerator extends javax.swing.JFrame {
         }
     }
 
-    private class TransferableImage implements java.awt.datatransfer.Transferable {
+    private class TransferableImage implements Transferable {
 
         private final java.awt.Image image;
 
@@ -124,8 +124,8 @@ public class QrcodeGenerator extends javax.swing.JFrame {
 
         public boolean isDataFlavorSupported( DataFlavor flavor) {
             DataFlavor[] flavors = getTransferDataFlavors();
-            for ( int i = 0; i < flavors.length; i++ ) {
-                if ( flavor.equals( flavors[i] ) ) {
+            for (int i = 0; i < flavors.length; i++) {
+                if (flavor.equals(flavors[i])) {
                     return true;
                 }
             }
@@ -838,7 +838,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(trans, new ClipboardOwner() {
             public void lostOwnership(Clipboard clpbrd, Transferable t) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                // Ignore
             }
         } );
 }//GEN-LAST:event_jButton1ActionPerformed
@@ -964,6 +964,7 @@ private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:ev
     // End of variables declaration//GEN-END:variables
 
     private void generateQrCode(String messsage) {
+        Logger.getLogger(QrcodeGenerator.class.getName()).log(Level.INFO, messsage);
         if (messsage == null || messsage.isEmpty()) {
             image = null;
             return;
