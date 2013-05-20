@@ -786,7 +786,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     if (chooser1.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
         return;
     }
-    String fileName = chooser1.getSelectedFile().getPath();
+    String fileName = chooser1.getSelectedFile().getPath().replaceFirst("(.*?)(\\.\\w{3,4})*$", "$1.png");
     try {
         ImageIO.write(image, "png", new File(fileName));
     } catch (IOException ex) {
