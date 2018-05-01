@@ -5,7 +5,7 @@
   <groupId>com.github.javadev</groupId>
   <artifactId>qrcode-generator</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1</version>
   <name>qrcode</name>
   <description>The swing applicationn to generate QR codes</description>
   <url>https://github.com/javadev/qrcode-generator</url>
@@ -73,7 +73,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.1</version>
+        <version>3.0.0</version>
           <executions>
               <execution>
                   <id>attach-sources</id>
@@ -103,12 +103,12 @@
     <dependency>
         <groupId>net.java.dev.swing-layout</groupId>
         <artifactId>swing-layout</artifactId>
-        <version>1.0</version>
+        <version>1.0.2</version>
     </dependency>
     <dependency>
         <groupId>com.google.zxing</groupId>
         <artifactId>core</artifactId>
-        <version>2.1</version>
+        <version>3.3.2</version>
     </dependency>
   </dependencies>
   
